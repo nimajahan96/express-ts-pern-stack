@@ -1,0 +1,13 @@
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(256)
+  name      String   @db.VarChar(128)
+  password  String   @db.VarChar(256)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tasks Task[]
+  lists List[]
+
+  @@map("users")
+}

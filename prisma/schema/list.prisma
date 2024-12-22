@@ -1,0 +1,13 @@
+model List {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(128)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  tasks Task[]
+
+  @@map("groups")
+}

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", // Use latest JavaScript features
+    "module": "commonjs", // Use CommonJS for compatibility with Node.js
+    "rootDirs": ["src", "prisma"], // Source files directory
+    "outDir": "./dist", // Output directory
+    "strict": true, // Enable all strict type-checking options
+    "strictNullChecks": true, // Ensure null and undefined are handled explicitly
+    "strictPropertyInitialization": true, // Check for class properties initialization
+    "noImplicitAny": true, // Disallow variables with implicit 'any' type
+    "noImplicitThis": true, // Disallow 'this' with an implicit 'any' type
+    "alwaysStrict": true, // Parse files in strict mode
+    "noUnusedLocals": true, // Report unused local variables
+    "noUnusedParameters": true, // Report unused function parameters
+    "noFallthroughCasesInSwitch": true, // Disallow fallthrough cases in switch statements
+    "noImplicitReturns": true, // Ensure all code paths in a function return a value
+    "esModuleInterop": true, // Interop with CommonJS modules
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file naming
+    "resolveJsonModule": true, // Allow importing JSON files
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "moduleResolution": "node", // Use Node.js module resolution
+    "experimentalDecorators": true, // Enable decorators
+    "emitDecoratorMetadata": true // Emit metadata for decorators
+  },
+  "include": ["src/**/*", "prisma/**/*", "server.ts"], // Include all TypeScript files in the 'src' directory
+  "exclude": ["node_modules", "dist"], // Exclude the output directory and dependencies
+  "ts-node": {
+    "transpileOnly": true // Speed up development with ts-node
+  }
+}

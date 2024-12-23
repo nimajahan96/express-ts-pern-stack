@@ -9,5 +9,5 @@ model List {
 
   tasks Task[]
 
-  @@map("groups")
+  @@map("lists")
 }

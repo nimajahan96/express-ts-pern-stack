@@ -8,14 +8,16 @@ const prisma = new PrismaClient();
 const runSeeder = async () => {
   try {
     await userSeeder();
-    await todoSeeder();
     await groupSeeder();
-    console.log('Seeding completed successfully.');
+    await todoSeeder();
+    console.log("Seeding completed successfully.");
   } catch (error) {
-    console.error('Error running seeder:', error);
+    console.error("Error running seeder:", error);
   } finally {
     await prisma.$disconnect();
   }
 };
 
 runSeeder();
+
+// npx prisma db seed

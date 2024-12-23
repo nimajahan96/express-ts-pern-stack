@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import timeout from "connect-timeout";
 import express, { NextFunction, Request, Response } from "express";
 import globalErrorHandlingMiddleware from "./middleware/globalErrorHandlingMiddleware";
+import routes from "./routes/route";
 
 const app = express();
 
@@ -31,6 +32,8 @@ app.use(
 );
 
 app.use(helmet());
+
+app.use("/api/v1", routes);
 
 // route not found error message
 app.all("*", (req: Request, res: Response, _next: NextFunction) => {

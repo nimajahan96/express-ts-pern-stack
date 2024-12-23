@@ -22,7 +22,7 @@
     "experimentalDecorators": true, // Enable decorators
     "emitDecoratorMetadata": true // Emit metadata for decorators
   },
-  "include": ["src/**/*", "prisma/**/*", "server.ts"], // Include all TypeScript files in the 'src' directory
+  "include": ["src/**/*.ts", "prisma/**/*.ts", "server.ts"], // Include all TypeScript files in the 'src' directory
   "exclude": ["node_modules", "dist"], // Exclude the output directory and dependencies
   "ts-node": {
     "transpileOnly": true // Speed up development with ts-node

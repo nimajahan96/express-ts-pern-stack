@@ -30,6 +30,6 @@
     "typescript": "^5.7.2"
   },
   "prisma": {
-    "seed": "node prisma/databaseSeeder.ts"
+    "seed": "ts-node --project tsconfig.json prisma/databaseSeeder.ts"
   }
 }

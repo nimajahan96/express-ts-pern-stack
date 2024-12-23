@@ -1,49 +1,52 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const groupSeeder = async () => {
   const groups = [
     {
-      name: 'Admin Group',
-      userIds: [1, 2],
+      name: "Admin Group",
+      userId: 1,
     },
     {
-      name: 'Project Team A',
-      userIds: [2, 3],
+      name: "Project Team A",
+      userId: 2,
     },
     {
-      name: 'Design Team',
-      userIds: [1, 3, 4],
+      name: "Design Team",
+      userId: 3,
     },
   ];
 
   try {
     await prisma.$transaction(async (prisma) => {
       for (const group of groups) {
-        const usersExist = await prisma.user.findMany({
-          where: { id: { in: group.userIds } },
+        const userExists = await prisma.user.findUnique({
+          where: { id: group.userId },
         });
 
-        if (usersExist.length !== group.userIds.length) {
-          console.error(`Some users do not exist for group: ${group.name}`);
+        if (!userExists) {
+          console.error(
+            `User with ID ${group.userId} does not exist for group: ${group.name}`
+          );
           continue;
         }
 
-        const createdGroup = await prisma.group.create({
+        await prisma.list.create({
           data: {
             name: group.name,
-            members: {
-              connect: group.userIds.map((userId) => ({ id: userId })),
-            },
+            userId: group.userId,
           },
         });
-
-        console.log(`Group "${createdGroup.name}" added successfully.`);
       }
     });
   } catch (error) {
-    console.error('Error seeding groups:', error.message);
+    console.error(
+      "Error seeding groups:",
+      error instanceof Error ? error.message : error
+    );
+  } finally {
+    await prisma.$disconnect();
   }
 };
 

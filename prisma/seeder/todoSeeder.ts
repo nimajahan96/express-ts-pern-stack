@@ -8,87 +8,100 @@ const todoSeeder = async () => {
       title: 'Finish project report',
       description: 'Complete the final report for the project team.',
       userId: 1,
-      groupId: 1,
+      listId: 1,
     },
     {
       title: 'Design the homepage',
       description: 'Create a design prototype for the homepage.',
       userId: 2,
-      groupId: 3,
+      listId: 2,
     },
     {
       title: 'Write unit tests',
       description: 'Write unit tests for the new features.',
       userId: 3,
-      groupId: 2,
+      listId: 3,
     },
     {
-      title: 'refactor code',
+      title: 'Refactor code',
       description: 'Refactor the code to improve performance and readability.',
-      userId: 3,
-      groupId: 2,
+      userId: 1,
+      listId: 1,
     },
     {
       title: 'Design the landing page',
-      description: 'Write unit tests for the new features.',
-      userId: 3,
-      groupId: 2,
+      description: 'Design a user-friendly landing page.',
+      userId: 2,
+      listId: 2,
     },
     {
       title: 'Design the login page',
-      description: 'Design the for the new features.',
+      description: 'Create an intuitive login page design.',
       userId: 3,
-      groupId: 2,
+      listId: 3,
     },
     {
       title: 'Design the register page',
-      description: 'Design the for the new features.',
+      description: 'Develop a clean and simple register page design.',
       userId: 3,
-      groupId: 2,
+      listId: 3,
     },
     {
       title: 'Design the forgot password page',
-      description: 'Design the for the new features.',
-      userId: 3,
-      groupId: 2,
+      description: 'Design a helpful forgot password page.',
+      userId: 1,
+      listId: 1,
     },
     {
-      title: 'responsive all pages',
-      description: 'responsive all pages for nokia 1200',
-      userId: 3,
-      groupId: 2,
+      title: 'Responsive all pages',
+      description: 'Make all pages responsive for Nokia 1200.',
+      userId: 2,
+      listId: 2,
     },
     {
-      title: 'implement the api for auth',
-      description: 'implement the api for auth',
+      title: 'Implement the API for auth',
+      description: 'Develop the API endpoints for user authentication.',
       userId: 3,
-      groupId: 2,
+      listId: 3,
     },
     {
-      title: 'implement mw authorization',
-      description: 'implement mw authorization',
-      userId: 3,
-      groupId: 2,
+      title: 'Implement middleware authorization',
+      description: 'Add middleware for user authorization.',
+      userId: 2,
+      listId: 2,
     },
   ];
 
   try {
     await prisma.$transaction(async (prisma) => {
       for (const todo of todos) {
-        const createdTodo = await prisma.todo.create({
+        const userExists = await prisma.user.findUnique({ where: { id: todo.userId } });
+        const listExists = await prisma.list.findUnique({ where: { id: todo.listId } });
+
+        if (!userExists || !listExists) {
+          console.error(
+            `Skipping task "${todo.title}": User or List does not exist (userId: ${todo.userId}, listId: ${todo.listId}).`
+          );
+          continue;
+        }
+
+        // Create the task
+        await prisma.task.create({
           data: {
             title: todo.title,
             description: todo.description,
+            completed: false,
             userId: todo.userId,
-            groupId: todo.groupId,
+            listId: todo.listId,
           },
         });
-
-        console.log(`To-do "${createdTodo.title}" added successfully.`);
       }
     });
   } catch (error) {
-    console.error('Error seeding todos:', error.message);
+    if(error instanceof Error) {
+      console.error('Error seeding tasks:', error.message);
+    }
+    console.error('Error seeding tasks');
   }
 };
 

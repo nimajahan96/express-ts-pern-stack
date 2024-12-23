@@ -25,19 +25,20 @@ const userSeeder = async () => {
     await prisma.$transaction(async (prisma) => {
       for (const user of users) {
 
-        const createdUser = await prisma.user.create({
+        await prisma.user.create({
           data: {
             email: user.email,
             name: user.name,
             password: user.password,
           },
         });
-
-        console.log(`User ${createdUser.name} added successfully.`);
       }
     });
   } catch (error) {
-    console.error('Error seeding users:', error.message);
+    if(error instanceof Error) {
+      console.error('Error seeding users:', error.message);
+    }
+    console.error('Error seeding users');
   }
 };
 

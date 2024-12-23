@@ -12,5 +12,5 @@ model Task {
   listId Int
   list List @relation(fields: [listId], references: [id])
 
-  @@map("Tasks")
+  @@map("tasks")
 }

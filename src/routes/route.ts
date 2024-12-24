@@ -92,6 +92,15 @@ routes.get(
     const { id } = req.params;
 
     try {
+      if (!/^[1-9]{1,3}$/.test(id)) {
+        res.status(422).json({
+          success: false,
+          data: [],
+          message: "id is not valid",
+        });
+        return;
+      }
+
       const users = await prisma.user.findMany({
         where: {
           id: parseInt(id),
@@ -178,8 +187,17 @@ routes.post(
 routes.get(
   "/users/:userId/tasks",
   expressAsyncHandler(async (req: Request, res: Response) => {
+    const { userId } = req.params;
     try {
-      const { userId } = req.params;
+      if (!/^[1-9]{1,3}$/.test(userId)) {
+        res.status(422).json({
+          success: false,
+          data: [],
+          message: "user Id is not valid",
+        });
+        return;
+      }
+
       const userTasks = await prisma.task.findMany({
         where: {
           userId: parseInt(userId),
@@ -312,6 +330,15 @@ routes.get(
   expressAsyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
+      if (!/^[1-9]{1,3}$/.test(id)) {
+        res.status(422).json({
+          success: false,
+          data: [],
+          message: "id is not valid",
+        });
+        return;
+      }
+
       const task = await prisma.task.findFirst({
         where: { id: parseInt(id) },
         select: todoSelections,
@@ -382,6 +409,15 @@ routes.post(
       return;
     }
 
+    if (!/^[1-9]{1,3}$/.test(userId)) {
+      res.status(422).json({
+        success: false,
+        data: [],
+        message: "user Id is not valid",
+      });
+      return;
+    }
+
     try {
       const userExists = await prisma.user.findUnique({
         where: { id: userId },
@@ -424,20 +460,28 @@ routes.get(
   expressAsyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const group = await prisma.list.findUnique({
-      where: { id: parseInt(id) },
-      select: { id: true, name: true },
-    });
-
-    if (!group) {
-      res.status(404).json({
+    if (!/^[1-9]{1,3}$/.test(id)) {
+      res.status(422).json({
         success: false,
-        message: "Group not found.",
+        data: [],
+        message: "id is not valid",
       });
       return;
     }
-
     try {
+      const group = await prisma.list.findUnique({
+        where: { id: parseInt(id) },
+        select: { id: true, name: true },
+      });
+
+      if (!group) {
+        res.status(404).json({
+          success: false,
+          message: "Group not found.",
+        });
+        return;
+      }
+
       const tasks = await prisma.task.findMany({
         where: { listId: parseInt(id) },
         select: todoSelections,

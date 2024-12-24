@@ -510,4 +510,32 @@ routes.get(
   })
 );
 
+// Test Transaction
+routes.get("/transaction-test", async (_req: Request, res: Response) => {
+  try {
+    await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          name: "aaaaaaaaaaaaa",
+          email: "aaaaaaaaaaaa@example.com",
+          password: "123456789",
+        },
+      });
+
+      throw new Error("some error happened during crud operation");
+
+      await tx.user.update({
+        where: { id: user.id },
+        data: { name: "new aaaaaaa" },
+      });
+    });
+
+    res.json({ success: true, message: "Transaction successful" });
+    return;
+  } catch (err) {
+    res.status(500).json({ success: false, error: "Transaction failed" });
+    return;
+  }
+});
+
 export default routes;

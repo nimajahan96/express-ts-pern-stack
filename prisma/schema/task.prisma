@@ -7,10 +7,10 @@ model Task {
   updatedAt   DateTime @updatedAt
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   listId Int
-  list List @relation(fields: [listId], references: [id])
+  list   List @relation(fields: [listId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("tasks")
 }
